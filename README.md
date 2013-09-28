@@ -1,6 +1,6 @@
-#football
+#gtastock
 
-Fantasy Football web application intended for mobile devices.
+GTA Stock web application intended for mobile devices.
 
 ## Technologies in use
 #### Bootstrap

@@ -1,20 +1,20 @@
 {
-  "name": "loki-football",
+  "name": "gtastock",
   "version": "0.0.1",
   "repository" : {
     "type" : "git",
-    "url" : "https://github.com/LokiDesign/football.git"
+    "url" : "https://github.com/LokiDesign/gtastock.git"
   },
   "engines": {
-    "node": "0.8.3",
-    "npm": "1.3.x"
+    "node": "*",
+    "npm": "*"
   },
   "private": false,
   "scripts": {
     "start": "node app.js"
   },
   "dependencies": {
-    "express": "3.0.x",
+    "express": "*",
     "jade": "*",
     "connect-flash": "*",
     "request": "*",
