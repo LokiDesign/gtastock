@@ -6,12 +6,6 @@
 var express = require('express'),
  routes = require('./routes'),
  sites = require('./routes/sites'),
- ch11 = require('./routes/sites/ch11'),
- oc2 = require('./routes/sites/oc2'),
- ra1 = require('./routes/sites/ra1'),
- ra1rooms = require('./routes/sites/ra1/rooms'),
- ch11rooms = require('./routes/sites/ch11/rooms'),
- oc2rooms = require('./routes/sites/oc2/rooms'),
  // leagues = require('./routes/leagues'),
  // rightarm = require('./routes/rightarm'),
  // franchises = require('./routes/rightarm/franchises'),
@@ -45,12 +39,12 @@ if ('development' == app.get('env')) {
 }
 app.all('/', routes.index);
 app.all('/sites', sites.index);
-app.all('/ch11', ch11.index)
-app.all('/oc2', oc2.index)
-app.all('/ra1', ra1.index)
-app.all('/ch11/:id?', ch11rooms.index)
-app.all('/oc2/:id?', oc2rooms.index)
-app.all('/ra1/:id?', ra1rooms.index)
+// app.all('/ch11', ch11.index)
+// app.all('/oc2', oc2.index)
+// app.all('/ra1', ra1.index)
+// app.all('/ch11/:id?', ch11rooms.index)
+// app.all('/oc2/:id?', oc2rooms.index)
+// app.all('/ra1/:id?', ra1rooms.index)
 // app.all('/scores', scores.index);
 // app.all('/leagues', leagues.index);
 // app.all('/rightarm', rightarm.index);
