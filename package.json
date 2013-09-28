@@ -6,7 +6,7 @@
     "url" : "https://github.com/LokiDesign/gtastock.git"
   },
   "engines": {
-    "node": "*",
+    "node": "0.10.17",
     "npm": "*"
   },
   "private": false,
