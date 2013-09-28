@@ -83,6 +83,9 @@ body {
 .jumbotron p {
   color: #ccc;
 }
+.de-emphasized {
+  color: #ccc !important;
+}
 body,
 h1,
 h2,

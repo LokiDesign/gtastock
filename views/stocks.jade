@@ -1,0 +1,73 @@
+extends layout
+
+block content
+    h3(style="margin-top:70px").page-title=title
+    .container
+        table.table.table-hover.table-condensed
+            thead
+                tr
+                    th Symbol
+                    th.hidden-xs.hidden-sm Name
+                    th Price
+                    th Change
+                    th Low / High
+            tbody(data-bind="foreach: stocks")
+                tr
+                    td(data-bind="text: CompanyCode")
+                    td(data-bind="text: CompanyName").hidden-xs.hidden-sm
+                    td(data-bind="text: CurrentPrice")
+                    td
+                        span(data-bind="text: PriceMovement, css: { 'text-danger': PriceMovementDirection == 'down', 'text-success': PriceMovementDirection == 'up' }", style="margin-right: 10px")
+                        span(data-bind="text: PriceMovementPercent, css: { 'text-danger': PriceMovementDirection == 'down', 'text-success': PriceMovementDirection == 'up' }")
+                        span(data-bind="css: { 'text-danger': PriceMovementDirection == 'down', 'text-success': PriceMovementDirection == 'up' }") &#37;
+                    td
+                        span(data-bind="text: LowPrice", style="margin-right: 5px")
+                        span /
+                        span(data-bind="text: HighPrice", style="margin-left: 5px")
+        div(data-bind="visible: stocks().length == 0").text-center
+            p
+                i(style="font-size: 100px; vertical-align: middle;").icon-gear.icon-spin
+                span(style="font-size: 50px; margin-left: 30px; vertical-align: middle;") Loading...
+
+block scripts
+    script(type='text/javascript').
+        
+        var Stock = function(){
+            var self = this;
+        }
+        var Page = function() {
+            var self = this;
+            
+            self.getStocks = function(platform){
+                $.ajax({
+                    url: '/getMostRecentStocks',
+                    data: { platform: platform },
+                    success: function (data) {
+                        var temp = [];
+                        for(var i = 0; i < data.Stocks.length; i++){
+                            var stock = new Stock();
+                            stock.CompanyCode = data.Stocks[i].CompanyCode
+                            stock.CompanyName = data.Stocks[i].CompanyName
+                            stock.CurrentPrice = data.Stocks[i].CurrentPrice.replace("$", "")
+                            stock.PriceMovement = data.Stocks[i].PriceMovement.replace("$", "")
+                            stock.PriceMovementPercent = data.Stocks[i].PriceMovementPercent
+                            stock.LowPrice = data.Stocks[i].LowPrice.replace("$", "")
+                            stock.HighPrice = data.Stocks[i].HighPrice.replace("$", "")
+                            stock.PriceMovementDirection = data.Stocks[i].PriceMovementDirection
+                            temp.push(stock);
+                        }
+
+                        self.stocks(temp);
+                    }
+                });
+            }
+
+            self.stocks = ko.observableArray()
+        }
+        $(document).ready(function(){
+            var model = new Page();
+
+            ko.applyBindings(model);
+
+            model.getStocks("#{platform}");
+        })

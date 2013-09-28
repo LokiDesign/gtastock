@@ -9,32 +9,30 @@ html
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     meta(charset='utf-8')
   body
-    #wrap
+    #wrap(style="background-color: #FFF")
       .navbar.navbar-fixed-top.navbar-inverse
         .container
           button(type='button', data-toggle='collapse', data-target='.navbar-responsive-collapse').navbar-toggle
             i.icon-chevron-down.text-muted
-          a(href='/').navbar-brand Intel Chat
+          a(href='/').navbar-brand GTA Stock
           .nav-collapse.collapse.navbar-responsive-collapse
             ul.nav.navbar-nav.menu
               li
                 a(href='/') Menu
               li
-                a(href='/schedule') Schedule
+                a(href='/stocks/xbox') Xbox Stocks
               li
-                a(href='/sites') Find Room
-              li
-                a(href='/help') Help
+                a(href='/stocks/ps3') PS3 Stocks
       section= body
         block content
       
         block footercrumbs
 
-    footer#footer
+    footer(style="height: 80px; padding-top: 0")#footer
             .well.follow
               .col-lg-3.pull-right
                 span
-                  p TraX Team
+                  p LokiDesign
           
     script(type='text/javascript', src='/javascripts/jquery.js')
     script(type='text/javascript', src='/javascripts/bootstrap.js')

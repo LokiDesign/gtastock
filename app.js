@@ -5,7 +5,8 @@
 
 var express = require('express'),
  routes = require('./routes'),
- sites = require('./routes/sites'),
+ stocksps3 = require('./routes/stocksps3'),
+ stocksxbox = require('./routes/stocksxbox'),
  // leagues = require('./routes/leagues'),
  // rightarm = require('./routes/rightarm'),
  // franchises = require('./routes/rightarm/franchises'),
@@ -38,7 +39,8 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 app.all('/', routes.index);
-app.all('/sites', sites.index);
+app.all('/stocks/ps3', stocksps3.index);
+app.all('/stocks/xbox', stocksxbox.index);
 // app.all('/ch11', ch11.index)
 // app.all('/oc2', oc2.index)
 // app.all('/ra1', ra1.index)
@@ -53,6 +55,69 @@ app.all('/sites', sites.index);
 // app.all('/signin', signin.index);
 // app.all('/signout', signout.index);
 // app.all('/signin/attempt', signin.controller);
+
+app.get('/getStockFeed', jsonData({
+    qual: 'https://',
+    host: '0x2620.org',
+    path: '/bawsaq/json/bawsaq.json'
+}))
+
+app.get('/getMostRecentStocks', function(req, res){
+
+    var values = {
+        qual: 'https://',
+        host: '0x2620.org',
+        path: '/bawsaq/json/bawsaq.json'
+    }
+
+    var url =  values.qual + values.host + values.path
+
+    var http = require('http');
+    var dat;
+
+    var request = require('request');
+    // console.log("HELLO?!")
+    var platform = req.query.platform;
+    // console.log("WTF?")
+    request(url, function (error, response, body) {
+        console.log("starting")
+        if (!error && response.statusCode == 200) {
+            // console.log(body)
+            dat = body;
+            // console.log("wtf")
+            // console.log(JSON.parse(body)[0])
+
+            var feeds = JSON.parse(body);
+
+
+
+            var mostRecent;
+
+            var temp = [];
+
+            console.log(platform)
+
+            for (var i = 0; i < feeds.length; i++){
+                if(feeds[i].indexOf(platform) > 0){
+                    temp.push(feeds[i]);
+                }
+            }
+
+            console.log(temp)
+
+            var chosenOne = temp[temp.length - 1];   
+
+            console.log(chosenOne)
+
+            request(chosenOne, function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+            
+                    res.send(JSON.parse(body))
+                }
+            })
+        }
+    })
+})
 
 // app.get('/getLeague/28655', jsonData({
 //     host: 'football32.myfantasyleague.com',
@@ -77,24 +142,24 @@ http.createServer(app).listen(app.get('port'), function(){
 function jsonData(values){
     return function(req, res){
         
+        var url;
+        console.log("1")
+        if (values.url){
+            console.log("2")
+            url = req.body.feed
+            console.log(req)
+        } else {
+            url =  values.qual + values.host + values.path
+        }
+
         var http = require('http');
         var dat;
 
-        var options = {
-            qual: 'http://',
-            host: values.host,
-            path: values.path
-        }
         var request = require('request');
-        var dat;
-        request = request.defaults({jar: true})
-        request.cookie('USER_ID:' + req.cookies.USER_ID)
-        request(options.qual + options.host + options.path, function (error, response, body) {
-            
+        
+        request(url, function (error, response, body) {
+            console.log("starting")
             if (!error && response.statusCode == 200) {
-                console.log(req.cookies.USER_ID)
-                
-                var xml = body
                 console.log(body)
                 res.send(JSON.parse(body))
             }
