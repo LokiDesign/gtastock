@@ -5,12 +5,15 @@ block content
     .container(style="background-color: rgba(250, 250, 250, 0.95)")
         table.table.table-hover.table-condensed
             thead
-                tr
-                    th Symbol
-                    th.hidden-xs.hidden-sm Name
-                    th Price
-                    th Change
-                    th Low / High
+                tr(data-bind="foreach: { data: headers, as: 'header' }")
+                    th(data-bind="click: $parent.sort")
+                        span(data-bind="text: header.title")
+                        i(data-bind="visible: $parent.activeSort.title !== header.title", style="margin-left: 5px; color: #aaa").icon-sort
+                    //- th(data-bind="click: $parent.sort ") Symbol
+                    //- th.hidden-xs.hidden-sm Name
+                    //- th Price
+                    //- th Change
+                    //- th Low / High
             tbody(data-bind="foreach: stocks")
                 tr
                     td(data-bind="text: CompanyCode")
@@ -22,7 +25,7 @@ block content
                         span(data-bind="css: { 'text-danger': PriceMovementDirection == 'down', 'text-success': PriceMovementDirection == 'up' }") &#37;
                     td
                         span(data-bind="text: LowPrice", style="margin-right: 5px")
-                        span /
+                    td
                         span(data-bind="text: HighPrice", style="margin-left: 5px")
         div(data-bind="visible: stocks().length == 0").text-center
             p
@@ -56,13 +59,84 @@ block scripts
                             stock.PriceMovementDirection = data.Stocks[i].PriceMovementDirection
                             temp.push(stock);
                         }
-
                         self.stocks(temp);
                     }
                 });
             }
-
             self.stocks = ko.observableArray()
+            self.headers = [
+                {
+                    title: 'Symbol',
+                    asc: false,
+                    foo: function (a, b){
+                        var aVal = a.CompanyCode.toLowerCase()
+                        var bVal = b.CompanyCode.toLowerCase()
+                        return aVal < bVal ? -1 : aVal > bVal ? 1 : aVal === bVal ? 0 : 0;
+                    }
+                },
+                {
+                    title: 'Name',
+                    asc: false,
+                    foo: function (a, b){
+                        var aVal = a.CompanyName.toLowerCase()
+                        var bVal = b.CompanyName.toLowerCase()
+                        return aVal < bVal ? -1 : aVal > bVal ? 1 : aVal === bVal ? 0 : 0;
+                    }
+                },
+                {
+                    title: 'Price',
+                    asc: false,
+                    foo: function (a,b){
+                        var aVal = parseFloat(a.CurrentPrice.replace(",", ""))
+                        var bVal = parseFloat(b.CurrentPrice.replace(",", ""))
+                        return aVal < bVal ? -1 : aVal > bVal ? 1 : aVal === bVal ? 0 : 0;
+                    }
+                },
+                {
+                    title: 'Change',
+                    asc: false,
+                    foo: function (a,b){
+                        var aVal = parseFloat(a.PriceMovementPercent)
+                        var bVal = parseFloat(b.PriceMovementPercent)
+                        return aVal < bVal ? -1 : aVal > bVal ? 1 : aVal === bVal ? 0 : 0;
+                    }
+                },
+                {
+                    title: 'Low',
+                    asc: false,
+                    foo: function (a,b){
+                        var aVal = parseFloat(a.LowPrice.replace(",", ""))
+                        var bVal = parseFloat(b.LowPrice.replace(",", ""))
+                        return aVal < bVal ? -1 : aVal > bVal ? 1 : aVal === bVal ? 0 : 0;
+                    }
+                },
+                {
+                    title: 'High',
+                    asc: false,
+                    foo: function (a,b){
+                        var aVal = parseFloat(a.HighPrice.replace(",", ""))
+                        var bVal = parseFloat(b.HighPrice.replace(",", ""))
+                        return aVal < bVal ? -1 : aVal > bVal ? 1 : aVal === bVal ? 0 : 0;
+                    }
+                }
+            ];
+            self.activeSort = { title: '', asc: false}
+            self.sort = function (header, event){
+                if (self.activeSort === header) {
+                    header.asc = !header.asc;
+                } else {
+                    self.activeSort = header;
+                }
+                var sort = self.stocks().sort(header.foo);
+                self.stocks(header.asc ? sort: sort.reverse());
+            };
+            self.isSortUp = function(header){
+                return self.activeSort.title === header.title && header.asc
+            }
+            self.isSortDown = function(header){
+                return self.activeSort.title === header.title && !header.asc
+            }
+            
         }
         $(document).ready(function(){
             var model = new Page();
