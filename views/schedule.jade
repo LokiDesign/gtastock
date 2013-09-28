@@ -1,0 +1,62 @@
+extends layout
+
+block content
+    h3.page-title= title
+    <!-- ko foreach: { data: matchups() } -->
+    a(href="#").list-group-item
+        .row
+            .col-6
+                h4
+                    span(data-bind="text: awayTeam").list-group-item-heading
+                    span.list-group-item-heading.schedule-at at
+                    span(data-bind="text: homeTeam").list-group-item-heading
+        .row
+            .col-12
+                span.text-muted Kickoff:&nbsp;
+                span(data-bind="text: kickoff").text-muted
+    <!-- /ko -->
+
+block footercrumbs
+    ul.breadcrumb
+        li 
+            a(href='/') Menu
+        li.active Schedule
+
+block scripts
+    script(type='text/javascript').
+        var matchup = function() {
+            var self = this
+            self.homeTeam = ko.observable()
+            self.awayTeam = ko.observable()
+            self.kickoff = ko.observable()
+        }
+        var Page = function() {
+            var self = this;
+            self.matchups = ko.observable([])
+            $.ajax({
+                url: '/getSchedule',
+                success: function (data) {
+                    var dat = data.nflSchedule.matchup;
+                    var tmp = [];
+                    for (var i = 0; i < dat.length; i++){
+                        var f = new matchup()
+                        var teams = dat[i].team;
+                        for (var j = 0; j < teams.length; j++){
+                            if(teams[j].isHome == 1){
+                                f.homeTeam(teams[j].id)
+                            } else {
+                                f.awayTeam(teams[j].id)
+                            }
+                        }
+                        f.kickoff(moment.unix(dat[i].kickoff).calendar())
+                        tmp.push(f)
+                    }
+                    self.matchups(tmp)
+                }
+            });
+        }
+        $(document).ready(function(){
+            var model = new Page();
+            ko.applyBindings(model);
+        })
+

@@ -1,0 +1,54 @@
+!!!
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/bootstrap.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/font-awesome/css/font-awesome.css')
+    link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans', type='text/css')
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(charset='utf-8')
+  body
+    #wrap
+      .navbar.navbar-fixed-top.navbar-inverse
+        .container
+          button(type='button', data-toggle='collapse', data-target='.navbar-responsive-collapse').navbar-toggle
+            i.icon-chevron-down.text-muted
+          a(href='/').navbar-brand Intel Chat
+          .nav-collapse.collapse.navbar-responsive-collapse
+            ul.nav.navbar-nav.menu
+              li
+                a(href='/') Menu
+              li
+                a(href='/schedule') Schedule
+              li
+                a(href='/sites') Find Room
+              li
+                a(href='/help') Help
+      section= body
+        block content
+      
+        block footercrumbs
+
+    footer#footer
+            .well.follow
+              .col-lg-3.pull-right
+                span
+                  p TraX Team
+          
+    script(type='text/javascript', src='/javascripts/jquery.js')
+    script(type='text/javascript', src='/javascripts/bootstrap.js')
+    script(type='text/javascript', src='/javascripts/knockout.js')
+    script(type='text/javascript', src='/javascripts/moment.js')
+    script(type='text/javascript').
+      $(document).ready(function(){
+        var path = window.location.pathname
+        var menuitems = $(".menu li a")
+        for (var s = 0; s < menuitems.length; s++){
+          if($(menuitems[s]).attr("href") === path){
+            $(menuitems[s]).parent().addClass("active")
+          }
+        }
+      })
+
+  block scripts

@@ -1,0 +1,50 @@
+extends layout
+
+block content
+    h3.page-title=title
+    <!-- ko foreach: { data: sites() } -->
+    a(data-bind="attr: { 'href': '/' + name().toLowerCase() }").list-group-item
+        .row
+            .col-12
+                h4(data-bind="text: name").list-group-item-heading
+        .row
+            .col-12
+                span location:&nbsp;
+                span(data-bind="text: location").list-group-item-text
+    <!-- /ko -->
+block footercrumbs
+    ul.breadcrumb
+        li 
+            a(href='/') Menu
+        li.active Rooms
+
+block scripts
+    script(type='text/javascript').
+        var site = function(name, location) {
+            var self = this
+            self.name = ko.observable(name)
+            self.location = ko.observable(location)
+        }
+        var Page = function() {
+            var self = this;
+            self.sites = ko.observable([new site("CH11", "Arizona"), new site("OC2", "Arizona"), new site("RA1", "Oregon")])
+            // $.ajax({
+            //     url: '/getLeague/28655',
+            //     success: function (data) {
+            //         var dat = data.league.franchises.franchise;
+            //         var tmp = [];
+            //         for (var i = 0; i < dat.length; i++){
+            //             var f = new franchise()
+            //             f.name(dat[i].name)
+            //             f.logo(dat[i].logo)
+            //             f.division(dat[i].division)
+            //             tmp.push(f)
+            //         }
+            //         self.franchises(tmp)
+            //     }
+            // });
+        }
+        $(document).ready(function(){
+            var model = new Page();
+            ko.applyBindings(model);
+        })

@@ -1,0 +1,20 @@
+extends layout
+
+block content
+    .jumbotron-index.text-center
+        .container
+            .row
+            p.text-warning #{messages}
+                .col.col-lg-12.col-sm-12
+                    form(action='/signin/attempt', method='post')
+                        .form-group
+                            input(name='leagueid', type='text', placeholder='Enter League Id').form-control.input-lg
+                        .form-group
+                            input(name='franchiseid', type='text', placeholder='Enter Franchise Id').form-control.input-lg
+                        .form-group
+                            input(name='password', type='password', placeholder='Enter Password').form-control.input-lg
+                        .form-group
+                            input(type='submit', value='Sign in').btn.btn-default.btn-block.btn-lg
+
+block scripts
+    script(type='text/javascript').

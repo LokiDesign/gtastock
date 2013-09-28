@@ -1,0 +1,31 @@
+extends layout
+
+block content
+    .jumbotron-index.text-center
+        .container
+            .row
+                .col.col-lg-12.col-sm-12
+                    h3=title
+
+block footercrumbs
+    ul.breadcrumb
+        li 
+            a(href='/') Menu
+        li 
+            a(href='/sites') Sites
+        li.active=title
+
+block scripts
+    script(type='text/javascript').
+        var Room = function(name) {
+            var self = this
+            self.name = ko.observable(name)
+        }
+        var rooms= !{rooms}
+        var Page = function() {
+            var self = this;
+        }
+        $(document).ready(function(){
+            var model = new Page();
+            ko.applyBindings(model);
+        })

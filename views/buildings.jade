@@ -1,0 +1,38 @@
+extends layout
+
+block content
+    h3.page-title=title
+    <!-- ko foreach: { data: rooms } -->
+    a(data-bind="attr: { 'href': '/'+ '#{title}'.toLowerCase() + '/' + name().toLowerCase() }").list-group-item
+        .row
+            .col-12
+                h4(data-bind="text: name").list-group-item-heading
+    <!-- /ko -->
+block footercrumbs
+    ul.breadcrumb
+        li 
+            a(href='/') Menu
+        li 
+            a(href='/sites') Sites
+        li.active Rooms
+
+block scripts
+    script(type='text/javascript').
+        var Room = function(name) {
+            var self = this
+            self.name = ko.observable(name)
+        }
+        var rooms= !{rooms}
+        var Page = function() {
+            var self = this;
+            self.rooms = ko.observableArray()
+            var el = [];
+            for(var i = 0; i < rooms.length; i++){
+                el.push(new Room(rooms[i].name))
+            }
+            self.rooms(el)
+        }
+        $(document).ready(function(){
+            var model = new Page();
+            ko.applyBindings(model);
+        })
