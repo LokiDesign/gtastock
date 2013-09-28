@@ -44,18 +44,15 @@ body {
   padding-top: 30px;
 }
 .jumbotron,
-.jumbotron-index,
-.jumbotron-league {
+.jumbotron-index {
   padding: 100px 60px 80px;
   min-height: 400px;
 }
 .jumbotron-index {
-  background: #b94a48;
   color: #fff;
 }
-.jumbotron-league {
-  background: #1abc9c;
-  color: #fff;
+#wrap {
+  background: url("/../bg2.jpg") no-repeat center center fixed;
 }
 .jumbotron p {
   margin: 20px auto;
